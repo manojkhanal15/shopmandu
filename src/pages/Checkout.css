@@ -1,0 +1,76 @@
+.checkout {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 40px;
+}
+
+/* Form */
+.checkout-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.checkout-form input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.checkout-btn {
+  padding: 12px;
+  background: black;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.checkout-error {
+  color: red;
+  font-size: 13px;
+}
+
+/* Summary */
+.checkout-summary {
+  border: 1px solid #eee;
+  padding: 20px;
+}
+
+.checkout-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .checkout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Payment section */
+.payment {
+  margin-top: 20px;
+}
+
+.payment h3 {
+  margin-bottom: 10px;
+}
+
+.payment label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+/* Card inputs */
+.card-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}

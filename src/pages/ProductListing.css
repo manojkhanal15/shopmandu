@@ -1,0 +1,91 @@
+.plp {
+  padding: 40px 20px;
+}
+
+.plp__content {
+  display: flex;
+  gap: 40px;
+}
+
+/* Filters */
+.plp__filters {
+  width: 220px;
+  border-right: 1px solid #eee;
+}
+
+/* Products */
+.plp__products {
+  flex: 1;
+}
+
+/* Top bar */
+.plp-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.plp-sort {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.plp-sort label {
+  font-size: 14px;
+}
+
+.plp-sort select {
+  padding: 6px 10px;
+  font-size: 14px;
+}
+
+.plp-clear {
+  background: none;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* Active filters */
+.plp-active-filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.plp-active-filters span {
+  padding: 6px 10px;
+  background: #f4f4f4;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* Empty state */
+.plp-empty {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.plp-empty h2 {
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+
+.plp-empty p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.plp-empty__reset {
+  padding: 10px 18px;
+  background: black;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}

@@ -1,0 +1,38 @@
+.filters {
+  padding: 20px;
+}
+
+.filter-group {
+  margin-bottom: 20px;
+}
+
+.filter-group p {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.filter-group button {
+  display: inline-block;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  padding: 6px 12px;
+  background: white;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.filter-group button.active {
+  background: black;
+  color: white;
+  border-color: black;
+}
+
+.filters-reset {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: none;
+  border: 1px solid black;
+  cursor: pointer;
+  font-size: 13px;
+}

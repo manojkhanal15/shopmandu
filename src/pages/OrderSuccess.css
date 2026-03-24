@@ -1,0 +1,20 @@
+.success {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.success h1 {
+  margin-bottom: 10px;
+}
+
+.success p {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.success-btn {
+  padding: 12px 20px;
+  background: black;
+  color: white;
+  text-decoration: none;
+}
