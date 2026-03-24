@@ -13,6 +13,9 @@ const ProductListing = ({ search }) => {
 
   const [sortBy, setSortBy] = useState("default");
 
+  // ✅ NEW: Mobile filter toggle
+  const [showFilters, setShowFilters] = useState(false);
+
   // ✅ Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 6;
@@ -48,7 +51,6 @@ const ProductListing = ({ search }) => {
 
   const totalPages = Math.ceil(sortedProducts.length / productsPerPage);
 
-  // Reset page on filter/search change
   useEffect(() => {
     setCurrentPage(1);
   }, [filters, sortBy, search]);
@@ -68,10 +70,25 @@ const ProductListing = ({ search }) => {
   return (
     <main className="plp">
       <div className="plp__content">
-        <aside className="plp__filters">
+
+        {/* 🔥 MOBILE FILTER BUTTON */}
+        <button
+          className="mobile-filter-btn"
+          onClick={() => setShowFilters(!showFilters)}
+        >
+          {showFilters ? "Close Filters ✕" : "Filters ☰"}
+        </button>
+
+        {/* FILTERS */}
+        <aside
+          className={`plp__filters ${
+            showFilters ? "show" : ""
+          }`}
+        >
           <Filters filters={filters} setFilters={setFilters} />
         </aside>
 
+        {/* PRODUCTS */}
         <section className="plp__products">
           {/* Top */}
           <div className="plp-top">
@@ -125,7 +142,7 @@ const ProductListing = ({ search }) => {
             <>
               <ProductGrid products={currentProducts} />
 
-              {/* ✅ Pagination UI */}
+              {/* Pagination */}
               <div className="pagination">
                 {Array.from({ length: totalPages }, (_, i) => (
                   <button
