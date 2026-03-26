@@ -13,14 +13,13 @@ const Cart = () => {
     clearCart,
   } = useCart();
 
-  // Empty cart
   if (cartItems.length === 0) {
     return (
       <div className="cart-empty">
-        <h2>Your cart is empty 🛒</h2>
+        <h2>Your cart is empty</h2>
         <p>Add some products to get started.</p>
         <Link to="/" className="cart-empty__link">
-          Continue Shopping
+          Continue Shopping →
         </Link>
       </div>
     );
@@ -53,20 +52,12 @@ const Cart = () => {
 
             {/* Quantity */}
             <div className="cart-item__quantity">
-              <button
-                onClick={() => decreaseQty(item.id)}
-              >
-                −
-              </button>
+              <button onClick={() => decreaseQty(item.id)}>−</button>
               <span>{item.quantity}</span>
-              <button
-                onClick={() => increaseQty(item.id)}
-              >
-                +
-              </button>
+              <button onClick={() => increaseQty(item.id)}>+</button>
             </div>
 
-            {/* ✅ Subtotal (UPDATED) */}
+            {/* Subtotal */}
             <div className="cart-item__subtotal">
               {formatPrice(item.price * item.quantity)}
             </div>
@@ -82,10 +73,12 @@ const Cart = () => {
         ))}
       </div>
 
-      {/* Summary */}
+      {/* SUMMARY */}
       <div className="cart-summary">
-        {/* ✅ Total (UPDATED) */}
-        <h3>Total: {formatPrice(totalPrice)}</h3>
+        <div className="cart-summary__left">
+          <h3>Total</h3>
+          <p>{formatPrice(totalPrice)}</p>
+        </div>
 
         <div className="cart-summary__actions">
           <button
@@ -99,7 +92,7 @@ const Cart = () => {
             to="/checkout"
             className="cart-checkout-btn"
           >
-            Proceed to Checkout
+            Checkout
           </Link>
         </div>
       </div>

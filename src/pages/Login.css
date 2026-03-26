@@ -1,0 +1,145 @@
+/* Layout */
+.auth {
+  display: flex;
+  min-height: 100vh;
+  font-family: "Inter", sans-serif;
+}
+
+/* LEFT SIDE (branding) */
+.auth-left {
+  flex: 1;
+  background: linear-gradient(135deg, #e6edf3, #f8fafc);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.auth-left::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top, rgba(0,0,0,0.05), transparent);
+}
+
+.auth-left h2 {
+  font-size: 28px;
+  letter-spacing: 4px;
+  color: #222;
+  z-index: 1;
+}
+
+/* RIGHT SIDE (form) */
+.auth-right {
+  flex: 1;
+  padding: 80px 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.auth-right h2 {
+  font-size: 28px;
+  margin-bottom: 24px;
+  letter-spacing: 2px;
+}
+
+/* Inputs */
+.auth-right input {
+  width: 100%;
+  padding: 10px 0;
+  margin-bottom: 20px;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  font-size: 14px;
+  background: transparent;
+  outline: none;
+  transition: 0.3s;
+}
+
+.auth-right input:focus {
+  border-bottom: 1px solid black;
+}
+
+/* Main button */
+.auth-btn {
+  width: 100%;
+  padding: 14px;
+  background: #0b2a4a;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  letter-spacing: 1px;
+  transition: 0.3s;
+}
+
+.auth-btn:hover {
+  background: #061a30;
+}
+
+/* Google button */
+.google-btn {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+  margin-bottom: 12px;
+  transition: 0.3s;
+}
+
+.google-btn:hover {
+  background: #f5f5f5;
+}
+
+/* Divider */
+.divider {
+  text-align: center;
+  margin: 16px 0;
+  font-size: 12px;
+  color: #999;
+}
+
+/* Error */
+.auth-error {
+  color: #d32f2f;
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+
+/* Switch text */
+.auth-switch {
+  margin-top: 16px;
+  font-size: 13px;
+}
+
+.auth-switch a {
+  color: #0b2a4a;
+  text-decoration: none;
+}
+
+.auth-switch a:hover {
+  text-decoration: underline;
+}
+
+/* ✨ Glass effect (optional subtle polish) */
+.auth-right {
+  backdrop-filter: blur(4px);
+}
+
+/* 📱 Responsive */
+@media (max-width: 768px) {
+  .auth {
+    flex-direction: column;
+  }
+
+  .auth-left {
+    height: 150px;
+  }
+
+  .auth-right {
+    padding: 40px 20px;
+  }
+}

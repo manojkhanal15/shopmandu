@@ -1,68 +1,139 @@
 import { NavLink, Link } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useAuth } from "../../context/AuthContext";
 import "./Header.css";
 
 const Header = ({ setSearch }) => {
   const { cartItems } = useCart();
-  const [showSearch, setShowSearch] = useState(false);
+  const { user, logout } = useAuth();
 
-  const toggleSearch = () => {
-    setShowSearch((prev) => !prev);
+  const [showAccount, setShowAccount] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const dropdownRef = useRef();
 
-    // Clear search when closing
-    if (showSearch) {
-      setSearch("");
-    }
+  // Scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Close dropdown
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setShowAccount(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Avatar fallback
+  const getAvatar = () => {
+    if (user?.photoURL) return user.photoURL;
+    const name = user?.displayName || user?.email || "User";
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(
+      name
+    )}&background=000&color=fff`;
   };
 
   return (
-    <header className="header">
-      {/* Logo */}
-      <div className="header__logo">
-        <Link to="/">
-          <img 
-            src="/images/logo.jpg" 
-            alt="Logo" 
-            className="header__logo-img"
-          />
-        </Link>
-      </div>
+    <header className={`header ${scrolled ? "header--scrolled" : ""}`}>
+      <div className="header__container">
 
-      {/* Navigation */}
-      <nav className="header__nav">
-        <NavLink to="/" end>Shop</NavLink>
-        <NavLink to="/fabric">Fabric</NavLink>
-        <NavLink to="/journal">Journal</NavLink>
-        <NavLink to="/about">About</NavLink>
-      </nav>
+        {/* LEFT - LOGO */}
+        <div className="header__left">
+          <Link to="/">
+            <img
+              src="/images/logo.jpg"
+              alt="Shop Mandu"
+              className="header__logo"
+            />
+          </Link>
+        </div>
 
-      {/* Actions */}
-      <div className="header__actions">
-        <span className="header__welcome">Welcome, Alex</span>
+        {/* CENTER - NAV */}
+        <nav className="header__nav">
+          <NavLink to="/" end>Shop</NavLink>
+          <NavLink to="/fabric">Fabric</NavLink>
+          <NavLink to="/journal">Journal</NavLink>
+          <NavLink to="/about">About</NavLink>
+        </nav>
 
-        {/* 🔍 Button */}
-        <button className="icon" onClick={toggleSearch}>
-          🔍
-        </button>
+        {/* RIGHT - ACTIONS */}
+        <div className="header__right">
 
-        {/* Search Input */}
-        {showSearch && (
+          {/* SEARCH */}
           <input
             type="text"
-            placeholder="Search..."
-            autoFocus
-            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search products..."
             className="header__search"
+            onChange={(e) => setSearch(e.target.value)}
           />
-        )}
 
-        <button className="icon">♡</button>
+          {/* ACCOUNT */}
+          <div className="account" ref={dropdownRef}>
+            <button
+              className="account-trigger"
+              onClick={() => setShowAccount(prev => !prev)}
+            >
+              {user ? (
+                <img
+                  src={getAvatar()}
+                  alt="user"
+                  className="account-avatar"
+                />
+              ) : (
+                <span className="icon">👤</span>
+              )}
+            </button>
 
-        {/* Cart */}
-        <Link to="/cart" className="header__cart">
-          🛒 ({cartItems.length})
-        </Link>
+            {showAccount && (
+              <div className="account-dropdown">
+                {!user ? (
+                  <>
+                    <h4>Welcome</h4>
+                    <div className="account-buttons">
+                      <Link to="/login" className="btn-dark">Sign In</Link>
+                      <Link to="/signup" className="btn-light">Join</Link>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <h4>{user.displayName || user.email}</h4>
+                    <button
+                      className="btn-dark"
+                      onClick={() => {
+                        logout();
+                        setShowAccount(false);
+                      }}
+                    >
+                      Logout
+                    </button>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* WISHLIST */}
+          <button className="icon">♡</button>
+
+          {/* CART */}
+          <Link to="/cart" className="cart">
+            🛒
+            {cartItems.length > 0 && (
+              <span className="cart-count">{cartItems.length}</span>
+            )}
+          </Link>
+
+        </div>
       </div>
     </header>
   );

@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useState } from "react";
 import { useCart } from "../context/CartContext";
 import products from "../data/products";
-import { formatPrice } from "../utils/formatPrice"; // ✅ NEW
+import { formatPrice } from "../utils/formatPrice";
 import "./ProductDetails.css";
 
 const ProductDetails = () => {
@@ -53,7 +53,8 @@ const ProductDetails = () => {
 
   return (
     <div className="product-details">
-      {/* Image */}
+      
+      {/* LEFT - IMAGE */}
       <div className="product-details__image-wrapper">
         <img
           src={product.image}
@@ -62,11 +63,10 @@ const ProductDetails = () => {
         />
       </div>
 
-      {/* Info */}
+      {/* RIGHT - INFO */}
       <div className="product-details__info">
         <h1 className="product-details__name">{product.name}</h1>
 
-        {/* ✅ FIXED PRICE */}
         <p className="product-details__price">
           {formatPrice(product.price)}
         </p>
@@ -75,11 +75,12 @@ const ProductDetails = () => {
           {product.description}
         </p>
 
-        {/* Actions */}
+        {/* ACTIONS */}
         <div className="product-details__actions">
-          {/* Size */}
-          <div className="product-details__sizes">
-            <p className="sizes-label">Select Size</p>
+
+          {/* SIZE */}
+          <div>
+            <p className="label">Select Size</p>
             <div className="sizes-list">
               {sizes.map((size) => (
                 <button
@@ -98,9 +99,9 @@ const ProductDetails = () => {
             </div>
           </div>
 
-          {/* Quantity */}
-          <div className="product-details__quantity">
-            <p className="quantity-label">Quantity</p>
+          {/* QUANTITY */}
+          <div>
+            <p className="label">Quantity</p>
             <div className="quantity-controls">
               <button onClick={decreaseQty}>−</button>
               <span>{quantity}</span>
@@ -108,12 +109,11 @@ const ProductDetails = () => {
             </div>
           </div>
 
-          {/* Error */}
           {error && (
             <p className="product-details__error">{error}</p>
           )}
 
-          {/* Add to Cart */}
+          {/* CTA */}
           <button
             className="product-details__cart-btn"
             onClick={handleAddToCart}

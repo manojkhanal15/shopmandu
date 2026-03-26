@@ -3,16 +3,23 @@
   max-width: 100%;
   margin: 0 auto;
   cursor: pointer;
+  transition: transform 0.3s ease;
 }
 
-/* Image wrapper */
+/* 🔥 Slight lift on hover */
+.product-card:hover {
+  transform: translateY(-6px);
+}
+
+/* ================= IMAGE ================= */
 .product-card__image-wrapper {
+  position: relative;
   display: block;
   width: 100%;
   aspect-ratio: 3 / 4;
   overflow: hidden;
   background-color: #f4f4f4;
-  border-radius: 8px;
+  border-radius: 10px;
 }
 
 /* Image */
@@ -20,25 +27,50 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s ease;
+  transition: transform 0.5s ease;
 }
 
-/* 🔥 Smooth hover zoom */
+/* 🔥 Smooth zoom */
 .product-card__image-wrapper:hover .product-card__image {
-  transform: scale(1.05);
+  transform: scale(1.08);
 }
 
-/* Info */
+/* ================= OVERLAY ================= */
+.product-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.product-card__overlay span {
+  color: #fff;
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Show overlay on hover */
+.product-card__image-wrapper:hover .product-card__overlay {
+  opacity: 1;
+}
+
+/* ================= INFO ================= */
 .product-card__info {
-  padding-top: 12px;
+  padding-top: 14px;
 }
 
 /* Name */
 .product-card__name {
   font-size: 14px;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   font-weight: 500;
   line-height: 1.4;
+  color: #222;
 }
 
 /* Price */
@@ -47,7 +79,7 @@
   color: #666;
 }
 
-/* 📱 Mobile adjustments */
+/* ================= MOBILE ================= */
 @media (max-width: 768px) {
   .product-card__name {
     font-size: 13px;

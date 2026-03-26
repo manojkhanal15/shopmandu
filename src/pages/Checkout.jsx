@@ -1,209 +1,146 @@
 import { useState } from "react";
 import { useCart } from "../context/CartContext";
-import { useNavigate } from "react-router-dom";
-import { formatPrice } from "../utils/formatPrice";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { motion } from "framer-motion";
+import { z } from "zod";
+import toast from "react-hot-toast";
 import "./Checkout.css";
 
+const schema = z.object({
+  name: z.string().min(1, "Full name is required"),
+  email: z.string().email("Invalid email"),
+  address: z.string().min(1, "Address is required"),
+  city: z.string().min(1, "City is required"),
+  zip: z.string().regex(/^\d+$/, "ZIP must be numeric"),
+});
+
 const Checkout = () => {
-  const { cartItems, totalPrice, clearCart } = useCart();
-  const navigate = useNavigate();
-
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    address: "",
-    city: "",
-    zip: "",
-  });
-
+  const { clearCart } = useCart();
   const [paymentMethod, setPaymentMethod] = useState("cod");
+  const [quantity, setQuantity] = useState(1);
 
-  const [card, setCard] = useState({
-    number: "",
-    expiry: "",
-    cvv: "",
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(schema),
   });
 
-  const [error, setError] = useState("");
-
-  // Handle form input
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  // 💳 Card formatting
-  const handleCardChange = (e) => {
-    let { name, value } = e.target;
-
-    if (name === "number") {
-      value = value.replace(/\D/g, "");
-      value = value.substring(0, 16);
-      value = value.replace(/(.{4})/g, "$1 ").trim();
-    }
-
-    if (name === "expiry") {
-      value = value.replace(/\D/g, "");
-      value = value.substring(0, 4);
-
-      if (value.length >= 3) {
-        value = value.slice(0, 2) + "/" + value.slice(2);
-      }
-    }
-
-    if (name === "cvv") {
-      value = value.replace(/\D/g, "");
-      value = value.substring(0, 3);
-    }
-
-    setCard({ ...card, [name]: value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    setError("");
-
-    // Validation
-    if (!form.name || !form.email || !form.address) {
-      setError("Please fill all required fields");
-      return;
-    }
-
-    if (paymentMethod === "card") {
-      if (!card.number || !card.expiry || !card.cvv) {
-        setError("Please fill card details");
-        return;
-      }
-    }
-
+  const onSubmit = () => {
+    toast.success("Order placed successfully 🎉");
     clearCart();
-    navigate("/success");
   };
-
-  if (cartItems.length === 0) {
-    return <h2 style={{ padding: "40px" }}>Your cart is empty</h2>;
-  }
 
   return (
     <div className="checkout">
-      {/* LEFT */}
-      <form className="checkout-form" onSubmit={handleSubmit}>
-        <h2>Checkout</h2>
 
-        {error && <p className="checkout-error">{error}</p>}
+      <h1 className="checkout-title">Checkout</h1>
+      <p className="checkout-subtitle">Please fill all required fields</p>
 
-        {/* Customer Info */}
-        <input
-          type="text"
-          name="name"
-          placeholder="Full Name"
-          onChange={handleChange}
-        />
+      <div className="checkout-grid">
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          onChange={handleChange}
-        />
+        {/* LEFT */}
+        <div className="checkout-left">
 
-        <input
-          type="text"
-          name="address"
-          placeholder="Address"
-          onChange={handleChange}
-        />
+          {/* SHIPPING */}
+          <motion.div className="card">
+            <h2>Shipping Information</h2>
 
-        <input
-          type="text"
-          name="city"
-          placeholder="City"
-          onChange={handleChange}
-        />
-
-        <input
-          type="text"
-          name="zip"
-          placeholder="ZIP Code"
-          onChange={handleChange}
-        />
-
-        {/* 💳 Payment */}
-        <div className="payment">
-          <h3>Payment Method</h3>
-
-          <label>
-            <input
-              type="radio"
-              value="cod"
-              checked={paymentMethod === "cod"}
-              onChange={() => setPaymentMethod("cod")}
-            />
-            Cash on Delivery
-          </label>
-
-          <label>
-            <input
-              type="radio"
-              value="card"
-              checked={paymentMethod === "card"}
-              onChange={() => setPaymentMethod("card")}
-            />
-            Card Payment
-          </label>
-
-          {/* Card Inputs */}
-          {paymentMethod === "card" && (
-            <div className="card-inputs">
-              <input
-                type="text"
-                name="number"
-                placeholder="Card Number"
-                value={card.number}
-                onChange={handleCardChange}
-              />
-
-              <input
-                type="text"
-                name="expiry"
-                placeholder="MM/YY"
-                value={card.expiry}
-                onChange={handleCardChange}
-              />
-
-              <input
-                type="text"
-                name="cvv"
-                placeholder="CVV"
-                value={card.cvv}
-                onChange={handleCardChange}
-              />
+            <div className="form-group">
+              <input {...register("name")} placeholder="Full Name" />
+              <p className="error">{errors.name?.message}</p>
             </div>
-          )}
+
+            <div className="form-group">
+              <input {...register("email")} placeholder="Email" />
+              <p className="error">{errors.email?.message}</p>
+            </div>
+
+            <div className="form-group">
+              <input {...register("address")} placeholder="Address" />
+              <p className="error">{errors.address?.message}</p>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <input {...register("city")} placeholder="City" />
+                <p className="error">{errors.city?.message}</p>
+              </div>
+
+              <div className="form-group">
+                <input {...register("zip")} placeholder="ZIP Code" />
+                <p className="error">{errors.zip?.message}</p>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* PAYMENT */}
+          <motion.div className="card">
+            <h2>Payment Method</h2>
+
+            <label className="radio">
+              <input
+                type="radio"
+                checked={paymentMethod === "cod"}
+                onChange={() => setPaymentMethod("cod")}
+              />
+              Cash on Delivery
+            </label>
+
+            <label className="radio">
+              <input
+                type="radio"
+                checked={paymentMethod === "card"}
+                onChange={() => setPaymentMethod("card")}
+              />
+              Card Payment
+            </label>
+
+            {paymentMethod === "card" && (
+              <div className="card-inputs">
+                <input placeholder="Card Number" />
+                <div className="form-row">
+                  <input placeholder="MM/YY" />
+                  <input placeholder="CVV" />
+                </div>
+              </div>
+            )}
+          </motion.div>
+
         </div>
 
-        <button type="submit" className="checkout-btn">
-          Place Order
-        </button>
-      </form>
+        {/* RIGHT */}
+        <motion.div className="card summary">
+          <h2>Order Summary</h2>
 
-      {/* RIGHT */}
-      <div className="checkout-summary">
-        <h3>Order Summary</h3>
-
-        {cartItems.map((item) => (
-          <div key={item.id} className="checkout-item">
-            <span>{item.name}</span>
-            <span>
-              {item.quantity} × {formatPrice(item.price)}
-            </span>
+          <div className="summary-item">
+            <span>The Sideswept Dhoti</span>
+            <span>₹1,999</span>
           </div>
-        ))}
 
-        <hr />
+          <div className="quantity">
+            <button onClick={() => setQuantity(q => Math.max(1, q - 1))}>−</button>
+            <span>{quantity}</span>
+            <button onClick={() => setQuantity(q => q + 1)}>+</button>
+          </div>
 
-        {/* ✅ Total Updated */}
-        <h3>Total: {formatPrice(totalPrice)}</h3>
+          <div className="summary-total">
+            <span>Total</span>
+            <span>₹{1999 * quantity}</span>
+          </div>
+
+          <p className="badge">✔ In Stock • Free Delivery</p>
+
+          <button
+            onClick={handleSubmit(onSubmit)}
+            className="checkout-btn"
+          >
+            Place Order
+          </button>
+        </motion.div>
+
       </div>
     </div>
   );
