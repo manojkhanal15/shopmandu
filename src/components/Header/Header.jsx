@@ -10,6 +10,8 @@ const Header = ({ setSearch }) => {
 
   const [showAccount, setShowAccount] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+
   const dropdownRef = useRef();
 
   // Scroll effect
@@ -47,7 +49,7 @@ const Header = ({ setSearch }) => {
     <header className={`header ${scrolled ? "header--scrolled" : ""}`}>
       <div className="header__container">
 
-        {/* LEFT - LOGO */}
+        {/* LEFT */}
         <div className="header__left">
           <Link to="/">
             <img
@@ -58,15 +60,23 @@ const Header = ({ setSearch }) => {
           </Link>
         </div>
 
-        {/* CENTER - NAV */}
-        <nav className="header__nav">
-          <NavLink to="/" end>Shop</NavLink>
-          <NavLink to="/fabric">Fabric</NavLink>
-          <NavLink to="/journal">Journal</NavLink>
-          <NavLink to="/about">About</NavLink>
+        {/* MOBILE MENU BUTTON */}
+        <button
+          className="menu-btn"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          ☰
+        </button>
+
+        {/* NAV */}
+        <nav className={`header__nav ${menuOpen ? "open" : ""}`}>
+          <NavLink to="/" end onClick={() => setMenuOpen(false)}>Shop</NavLink>
+          <NavLink to="/fabric" onClick={() => setMenuOpen(false)}>Fabric</NavLink>
+          <NavLink to="/journal" onClick={() => setMenuOpen(false)}>Journal</NavLink>
+          <NavLink to="/about" onClick={() => setMenuOpen(false)}>About</NavLink>
         </nav>
 
-        {/* RIGHT - ACTIONS */}
+        {/* RIGHT */}
         <div className="header__right">
 
           {/* SEARCH */}
@@ -84,11 +94,7 @@ const Header = ({ setSearch }) => {
               onClick={() => setShowAccount(prev => !prev)}
             >
               {user ? (
-                <img
-                  src={getAvatar()}
-                  alt="user"
-                  className="account-avatar"
-                />
+                <img src={getAvatar()} alt="user" className="account-avatar" />
               ) : (
                 <span className="icon">👤</span>
               )}
